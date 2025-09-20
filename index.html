@@ -3,1361 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AES HTML Encrypt & Decrypt Tool - Auto-Runnable</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Encrypt & Decrypt HTML</title>
     <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --accent: #4338ca;
-            --accent-hover: #3730a3;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --border: #e5e7eb;
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent: #818cf8;
-            --accent-hover: #6366f1;
-            --border: #334155;
-            --shadow: 0 4px 20px rgba(0,0,0,0.2);
-            --card-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            line-height: 1.6;
-            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
             min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
+        
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-            padding: 2rem 0;
-        }
-
-        header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            background: linear-gradient(135deg, var(--accent), #7c3aed);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto;
-            font-weight: 400;
-        }
-
-        .mode-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 2.5rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            position: relative;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--accent);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-
-        .card {
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 2.5rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-
-        [data-theme="dark"] .card:hover {
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .tab {
-            padding: 0.75rem 1.5rem;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .tab.active {
-            color: var(--accent);
-            border-bottom: 3px solid var(--accent);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .input-group,
-        .output-group {
-            margin-bottom: 1.75rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        label svg {
-            width: 18px;
-            height: 18px;
-            color: var(--accent);
-        }
-
-        input, textarea {
             width: 100%;
-            padding: 1.1rem;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-family: 'Courier New', monospace;
-            font-size: 1rem;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            resize: vertical;
-            font-weight: 500;
+            max-width: 1000px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin: 20px 0;
         }
-
-        textarea {
-            min-height: 180px;
-            line-height: 1.5;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
-        }
-
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-            justify-content: center;
-        }
-
-        .btn {
-            flex: 1;
-            min-width: 160px;
-            padding: 0.85rem 1.75rem;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn.primary {
-            background: linear-gradient(135deg, var(--accent), #6d28d9);
+        
+        header {
+            background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(67, 56, 202, 0.3);
-        }
-
-        .btn.primary:hover {
-            background: linear-gradient(135deg, var(--accent-hover), #5b21b6);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(67, 56, 202, 0.4);
-        }
-
-        .btn.secondary {
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
-            color: white;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-        }
-
-        .btn.secondary:hover {
-            background: linear-gradient(135deg, #0284c7, #0369a1);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
-        }
-
-        .btn.tertiary {
-            background: linear-gradient(135deg, #f43f5e, #dc2626);
-            color: white;
-            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
-        }
-
-        .btn.tertiary:hover {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.4);
-        }
-
-        .output-wrapper {
-            position: relative;
-        }
-
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.6rem 1rem;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(67, 56, 202, 0.2);
-        }
-
-        .copy-btn.download {
-            left: 12px;
-            right: auto;
-        }
-
-        .copy-btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3);
-        }
-
-        .message {
-            padding: 1.2rem;
-            border-radius: 12px;
+            padding: 25px;
             text-align: center;
-            font-weight: 500;
-            margin-top: 1.5rem;
-            opacity: 0;
-            transition: all 0.3s ease;
-            transform: translateY(-10px);
-            border: 2px solid transparent;
         }
-
-        .message.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .message.success {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            border-color: var(--success);
-        }
-
-        .message.error {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .message.warning {
-            background-color: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
-            border-color: var(--warning);
-        }
-
-        .message.info {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: var(--info);
-            border-color: var(--info);
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2.5rem 0;
-        }
-
-        .feature-card {
-            background: var(--bg-secondary);
-            padding: 1.5rem;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid var(--border);
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
+        
+        h1 {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent);
+            margin-bottom: 10px;
         }
-
-        .feature-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        
+        .description {
             font-size: 1.1rem;
+            opacity: 0.9;
         }
-
-        .feature-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            border-top: 1px solid var(--border);
-            margin-top: 2rem;
-        }
-
-        .footer-links {
+        
+        .main-content {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
         }
-
-        .footer-link {
-            color: var(--accent);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--accent-hover);
-            text-decoration: underline;
-        }
-
-        /* Responsive */
+        
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 2.2rem;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .card {
-                padding: 1.75rem;
-            }
-
-            .btn {
-                min-width: 140px;
-                padding: 0.75rem 1.25rem;
-            }
-
-            textarea {
-                min-height: 150px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 15px;
-            }
-
-            header h1 {
-                font-size: 1.8rem;
-            }
-
-            .subtitle {
-                font-size: 0.95rem;
-            }
-
-            .card {
-                padding: 1.5rem;
-            }
-
-            .btn {
-                min-width: 100%;
-                margin-bottom: 0.5rem;
-            }
-
-            .button-group {
+            .main-content {
                 flex-direction: column;
             }
-
-            .copy-btn {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.8rem;
-            }
         }
-
-        /* Animasi tambahan */
-        .pulse {
-            animation: pulse 2s infinite;
+        
+        .input-section, .output-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(67, 56, 202, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(67, 56, 202, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(67, 56, 202, 0); }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #2575fc;
+            font-weight: 600;
+        }
+        
+        .section-title svg {
+            margin-right: 10px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            font-family: monospace;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+        
+        .options {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2575fc;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .radio-group input {
+            margin-right: 5px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button svg {
+            margin-right: 8px;
+        }
+        
+        .encrypt-btn {
+            background-color: #6a11cb;
+            color: white;
+        }
+        
+        .encrypt-btn:hover {
+            background-color: #5809b3;
+        }
+        
+        .decrypt-btn {
+            background-color: #2575fc;
+            color: white;
+        }
+        
+        .decrypt-btn:hover {
+            background-color: #0d63e6;
+        }
+        
+        .copy-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+        
+        .output-area {
+            position: relative;
+        }
+        
+        .copy-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            color: #6c757d;
+            transition: color 0.3s;
+        }
+        
+        .copy-icon:hover {
+            color: #2575fc;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .info-box {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #2575fc;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2575fc;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+        }
+        
+        .feature-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .feature-list li svg {
+            color: #28a745;
+            margin-right: 8px;
+            margin-top: 4px;
+            flex-shrink: 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🔐 AES HTML Encrypt & Decrypt</h1>
-            <p class="subtitle">Enkripsi kode HTML Anda menjadi file .html yang bisa langsung dibuka di browser — masukkan kunci untuk melihat konten asli!</p>
+            <h1>HTML Encrypt & Decrypt</h1>
+            <p class="description">Alat untuk mengenkripsi dan mendekripsi kode HTML Anda dengan aman</p>
         </header>
-
-        <main>
-            <div class="mode-toggle">
-                <label class="switch">
-                    <input type="checkbox" id="darkModeToggle">
-                    <span class="slider"></span>
-                </label>
-                <span>🌙 Mode Gelap</span>
-            </div>
-
-            <div class="features">
-                <div class="feature-card">
-                    <div class="feature-icon">🔓</div>
-                    <h3 class="feature-title">Auto-Runnable</h3>
-                    <p class="feature-desc">Hasil enkripsi bisa langsung dibuka di browser</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3 class="feature-title">AES-256</h3>
-                    <p class="feature-desc">Enkripsi tingkat militer untuk keamanan maksimal</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💻</div>
-                    <h3 class="feature-title">Client-Side</h3>
-                    <p class="feature-desc">Semua proses terjadi di browser Anda</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="tabs">
-                    <div class="tab active" data-tab="encrypt">Enkripsi HTML</div>
-                    <div class="tab" data-tab="decrypt">Dekripsi HTML</div>
-                    <div class="tab" data-tab="info">Informasi</div>
-                </div>
-
-                <div class="tab-content active" id="encrypt-tab">
-                    <div class="message info show">
-                        <strong>💡 Fitur Baru:</strong> Hasil enkripsi sekarang bisa disimpan sebagai file .html dan langsung dibuka di browser! Masukkan kunci untuk melihat konten asli.
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="16 18 22 12 16 6"></polyline>
-                                <polyline points="8 6 2 12 8 18"></polyline>
-                            </svg>
-                            Kode HTML yang Akan Di-encrypt
-                        </label>
-                        <textarea id="inputText" placeholder="Masukkan kode HTML Anda di sini&#10;&#10;Contoh:&#10;<div class=&quot;container&quot;>&#10;  <h1>Halo Dunia!</h1>&#10;  <p>Ini adalah paragraf.</p>&#10;</div>"></textarea>
-                    </div>
-
-                    <div class="input-group">
-                        <label>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg>
-                            Kunci Enkripsi (minimal 8 karakter)
-                        </label>
-                        <input type="password" id="keyInput" placeholder="Masukkan kunci rahasia Anda di sini" autocomplete="off">
-                    </div>
-
-                    <div class="button-group">
-                        <button id="encryptBtn" class="btn primary pulse">🔐 Enkripsi & Buat File HTML</button>
-                        <button id="clearBtn" class="btn tertiary">🗑️ Bersihkan</button>
-                    </div>
-
-                    <div class="output-group">
-                        <label>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2v8"></path>
-                                <path d="M17.2 6.8L20 4"></path>
-                                <path d="M16 12a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"></path>
-                                <path d="M12 16v4"></path>
-                                <path d="M8 20h8"></path>
-                            </svg>
-                            Hasil Enkripsi (File HTML yang bisa dibuka)
-                        </label>
-                        <div class="output-wrapper">
-                            <textarea id="outputText" readonly placeholder="Hasil enkripsi akan muncul di sini..."></textarea>
-                            <button id="copyBtn" class="copy-btn">📋 Salin</button>
-                            <button id="downloadBtn" class="copy-btn download">💾 Download</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="decrypt-tab">
-                    <div class="message warning show">
-                        <strong>⚠️ Peringatan:</strong> Anda memerlukan kunci yang sama persis untuk mendekripsi kode HTML ini.
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="22 18 16 12 22 6"></polyline>
-                                <polyline points="2 6 8 12 2 18"></polyline>
-                            </svg>
-                            Kode Terenkripsi (atau file HTML terenkripsi)
-                        </label>
-                        <textarea id="decryptInputText" placeholder="Tempel kode terenkripsi Anda di sini..."></textarea>
-                    </div>
-
-                    <div class="input-group">
-                        <label>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg>
-                            Kunci Dekripsi
-                        </label>
-                        <input type="password" id="decryptKeyInput" placeholder="Masukkan kunci yang sama dengan saat enkripsi" autocomplete="off">
-                    </div>
-
-                    <div class="button-group">
-                        <button id="decryptBtn" class="btn secondary">🔓 Dekripsi HTML</button>
-                        <button id="decryptClearBtn" class="btn tertiary">🗑️ Bersihkan</button>
-                    </div>
-
-                    <div class="output-group">
-                        <label>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2v8"></path>
-                                <path d="M17.2 6.8L20 4"></path>
-                                <path d="M16 12a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"></path>
-                                <path d="M12 16v4"></path>
-                                <path d="M8 20h8"></path>
-                            </svg>
-                            Hasil Dekripsi (Kode HTML Asli)
-                        </label>
-                        <div class="output-wrapper">
-                            <textarea id="decryptOutputText" readonly placeholder="Hasil dekripsi akan muncul di sini..."></textarea>
-                            <button id="decryptCopyBtn" class="copy-btn">📋 Salin</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="info-tab">
-                    <div class="message info show">
-                        <h3 style="margin-bottom: 1rem; color: var(--accent);">ℹ️ Tentang Fitur Auto-Runnable</h3>
-                        <p style="margin-bottom: 1rem;">Sekarang, ketika Anda mengenkripsi kode HTML, hasilnya adalah file HTML lengkap yang bisa langsung Anda buka di browser.</p>
-                        <p style="margin-bottom: 1rem;">File ini berisi:</p>
-                        <ul style="text-align: left; margin-left: 1.5rem; margin-bottom: 1rem;">
-                            <li>Script dekripsi AES yang aman</li>
-                            <li>Form input untuk memasukkan kunci</li>
-                            <li>Tombol untuk mendekripsi dan menampilkan konten asli</li>
-                        </ul>
-                        <p><strong>Cara Penggunaan:</strong> Simpan hasil enkripsi sebagai file .html, buka di browser, masukkan kunci, lalu tekan tombol untuk melihat konten asli!</p>
-                    </div>
-                    
-                    <div class="features">
-                        <div class="feature-card">
-                            <div class="feature-icon">✅</div>
-                            <h3 class="feature-title">Langsung Bisa Dibuka</h3>
-                            <p class="feature-desc">Tidak perlu tools tambahan, buka saja di browser</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">🔒</div>
-                            <h3 class="feature-title">Tetap Aman</h3>
-                            <p class="feature-desc">Konten tetap terenkripsi sampai Anda masukkan kunci</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">📥</div>
-                            <h3 class="feature-title">Download Otomatis</h3>
-                            <p class="feature-desc">Tombol download untuk menyimpan file langsung</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <footer>
-            <p>🔐 AES HTML Encrypt & Decrypt Tool - Dibuat dengan ❤️ untuk keamanan dan privasi Anda</p>
-            <div class="footer-links">
-                <a href="#" class="footer-link">Dokumentasi</a>
-                <a href="#" class="footer-link">Fitur Keamanan</a>
-                <a href="#" class="footer-link">Kebijakan Privasi</a>
-            </div>
-        </footer>
-    </div>
-
-    <script>
-        // Implementasi AES sederhana menggunakan Web Crypto API
-        class AESHTMLCrypt {
-            static async generateKey(password) {
-                if (password.length < 8) {
-                    throw new Error("Kunci harus minimal 8 karakter");
-                }
-                
-                const encoder = new TextEncoder();
-                const passwordData = encoder.encode(password);
-                
-                // Hash password menjadi key material
-                const keyMaterial = await crypto.subtle.digest('SHA-256', passwordData);
-                
-                // Import key material sebagai CryptoKey
-                return await crypto.subtle.importKey(
-                    'raw',
-                    keyMaterial,
-                    {name: 'AES-GCM'},
-                    false,
-                    ['encrypt', 'decrypt']
-                );
-            }
-
-            static async encrypt(text, password) {
-                const key = await this.generateKey(password);
-                const encoder = new TextEncoder();
-                const data = encoder.encode(text);
-                
-                // Generate random IV
-                const iv = crypto.getRandomValues(new Uint8Array(12));
-                
-                // Encrypt
-                const encrypted = await crypto.subtle.encrypt(
-                    {
-                        name: 'AES-GCM',
-                        iv: iv
-                    },
-                    key,
-                    data
-                );
-                
-                // Gabungkan IV dan ciphertext
-                const result = new Uint8Array(iv.length + encrypted.byteLength);
-                result.set(iv);
-                result.set(new Uint8Array(encrypted), iv.length);
-                
-                // Encode ke Base64
-                return this.arrayBufferToBase64(result);
-            }
-
-            static async decrypt(encryptedText, password) {
-                const key = await this.generateKey(password);
-                
-                // Decode dari Base64
-                const encryptedData = this.base64ToArrayBuffer(encryptedText);
-                
-                // Pisahkan IV dan ciphertext
-                const iv = encryptedData.slice(0, 12);
-                const ciphertext = encryptedData.slice(12);
-                
-                // Decrypt
-                const decrypted = await crypto.subtle.decrypt(
-                    {
-                        name: 'AES-GCM',
-                        iv: iv
-                    },
-                    key,
-                    ciphertext
-                );
-                
-                // Decode hasil
-                const decoder = new TextDecoder();
-                return decoder.decode(decrypted);
-            }
-
-            static arrayBufferToBase64(buffer) {
-                let binary = '';
-                const bytes = new Uint8Array(buffer);
-                for (let i = 0; i < bytes.byteLength; i++) {
-                    binary += String.fromCharCode(bytes[i]);
-                }
-                return btoa(binary);
-            }
-
-            static base64ToArrayBuffer(base64) {
-                const binaryString = atob(base64);
-                const bytes = new Uint8Array(binaryString.length);
-                for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
-                return bytes.buffer;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Tab functionality
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(c => c.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    tab.classList.add('active');
-                    const tabId = tab.getAttribute('data-tab');
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
-                });
-            });
-
-            // Elements for encrypt tab
-            const inputText = document.getElementById('inputText');
-            const keyInput = document.getElementById('keyInput');
-            const outputText = document.getElementById('outputText');
-            const encryptBtn = document.getElementById('encryptBtn');
-            const clearBtn = document.getElementById('clearBtn');
-            const copyBtn = document.getElementById('copyBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const messageEl = document.querySelector('#encrypt-tab .message');
-
-            // Elements for decrypt tab
-            const decryptInputText = document.getElementById('decryptInputText');
-            const decryptKeyInput = document.getElementById('decryptKeyInput');
-            const decryptOutputText = document.getElementById('decryptOutputText');
-            const decryptBtn = document.getElementById('decryptBtn');
-            const decryptClearBtn = document.getElementById('decryptClearBtn');
-            const decryptCopyBtn = document.getElementById('decryptCopyBtn');
-            const decryptMessageEl = document.querySelector('#decrypt-tab .message');
-
-            // Dark mode toggle
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            
-            if (savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                darkModeToggle.checked = true;
-            }
-
-            darkModeToggle.addEventListener('change', () => {
-                const theme = darkModeToggle.checked ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
-            });
-
-            // Escape HTML entities for safe insertion into template
-            function escapeHtml(unsafe) {
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "<")
-                    .replace(/>/g, ">")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
-
-            // Escape JavaScript string for safe insertion
-            function escapeJsString(str) {
-                return str
-                    .replace(/\\/g, "\\\\")
-                    .replace(/'/g, "\\'")
-                    .replace(/"/g, "\\\"")
-                    .replace(/\n/g, "\\n")
-                    .replace(/\r/g, "\\r")
-                    .replace(/\t/g, "\\t")
-                    .replace(/\f/g, "\\f")
-                    .replace(/\v/g, "\\v");
-            }
-
-            // Create runnable HTML template
-            function createRunnableHTML(encryptedData) {
-                // Escape the encrypted data for safe insertion into JavaScript string
-                const safeEncryptedData = escapeJsString(encryptedData);
-                
-                return `<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konten Terlindungi</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 2rem;
-        }
-        .lock-icon {
-            font-size: 3rem;
-            color: #4338ca;
-            margin-bottom: 20px;
-        }
-        .input-group {
-            margin: 30px 0;
-            text-align: left;
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #555;
-            font-size: 1.1rem;
-        }
-        input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Courier New', monospace;
-            transition: border-color 0.3s;
-        }
-        input:focus {
-            outline: none;
-            border-color: #4338ca;
-        }
-        button {
-            background: linear-gradient(135deg, #4338ca, #3730a3);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(67, 56, 202, 0.3);
-        }
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(67, 56, 202, 0.4);
-        }
-        button:active {
-            transform: translateY(0);
-        }
-        #content {
-            display: none;
-            margin-top: 30px;
-            padding: 30px;
-            border: 1px solid #e2e8f0;
-            border-radius: 15px;
-            text-align: left;
-            background: #f8fafc;
-            max-height: 500px;
-            overflow: auto;
-            animation: fadeIn 0.5s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .message {
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 10px;
-            display: none;
-            font-weight: 500;
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .message.error {
-            background: #fee2e2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-        }
-        .message.success {
-            background: #dcfce7;
-            border: 1px solid #bbf7d0;
-            color: #16a34a;
-        }
-        footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="lock-icon">🔐</div>
-        <h1>Konten Terlindungi</h1>
-        <p>Masukkan kunci untuk melihat konten asli.</p>
         
-        <div class="input-group">
-            <label for="key">Kunci Dekripsi:</label>
-            <input type="password" id="key" placeholder="Masukkan kunci Anda di sini" autocomplete="off">
+        <div class="main-content">
+            <div class="input-section">
+                <div class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 19V5M5 12l7-7 7 7"/>
+                    </svg>
+                    <span>INPUT</span>
+                </div>
+                
+                <textarea id="inputText" placeholder="Masukkan kode HTML di sini..."></textarea>
+                
+                <div class="options">
+                    <div class="option-title">Metode Enkripsi:</div>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="algorithm" value="base64" checked>
+                            Base64 Encoding
+                        </label>
+                        <label>
+                            <input type="radio" name="algorithm" value "advanced">
+                            Advanced Encoding
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="encrypt-btn" onclick="encryptHTML()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Enkripsi
+                    </button>
+                    <button class="decrypt-btn" onclick="decryptHTML()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+                        </svg>
+                        Dekripsi
+                    </button>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <div class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14M5 12l7 7 7-7"/>
+                    </svg>
+                    <span>HASIL</span>
+                </div>
+                
+                <div class="output-area">
+                    <textarea id="outputText" readonly placeholder="Hasil enkripsi/dekripsi akan muncul di sini..."></textarea>
+                    <div class="copy-icon" onclick="copyToClipboard()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                        </svg>
+                    </div>
+                </div>
+                
+                <button class="copy-btn" onclick="copyToClipboard()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                    </svg>
+                    Salin Hasil
+                </button>
+                
+                <div class="info-box">
+                    <div class="info-title">Fitur Aplikasi:</div>
+                    <ul class="feature-list">
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Enkripsi kode HTML dengan metode Base64
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Enkripsi lanjutan dengan rotasi karakter
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Dekripsi kode yang telah dienkripsi
+                        </li>
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Antarmuka yang responsif dan mudah digunakan
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        
-        <button id="decryptBtn">🔓 Dekripsi & Tampilkan Konten</button>
-        
-        <div id="message" class="message"></div>
-        <div id="content"></div>
-        
-        <footer>
-            Konten ini dilindungi dengan enkripsi AES-256. Hanya orang dengan kunci yang benar yang dapat melihatnya.
-        </footer>
     </div>
+    
+    <div class="notification" id="notification">Teks berhasil disalin!</div>
+    
+    <footer>
+        <p>© 2023 HTML Encrypt & Decrypt Tool | Dibuat dengan ❤️ untuk melindungi kode HTML Anda</p>
+    </footer>
 
     <script>
-        // AES decryption implementation
-        class AESDecryptor {
-            static async generateKey(password) {
-                const encoder = new TextEncoder();
-                const passwordData = encoder.encode(password);
-                const keyMaterial = await crypto.subtle.digest('SHA-256', passwordData);
-                return await crypto.subtle.importKey(
-                    'raw',
-                    keyMaterial,
-                    {name: 'AES-GCM'},
-                    false,
-                    ['decrypt']
-                );
+        function encryptHTML() {
+            const inputText = document.getElementById('inputText').value;
+            if (!inputText.trim()) {
+                alert('Masukkan kode HTML terlebih dahulu!');
+                return;
             }
-
-            static async decrypt(encryptedText, password) {
-                try {
-                    const key = await this.generateKey(password);
-                    const encryptedData = this.base64ToArrayBuffer(encryptedText);
-                    const iv = encryptedData.slice(0, 12);
-                    const ciphertext = encryptedData.slice(12);
-                    const decrypted = await crypto.subtle.decrypt(
-                        {
-                            name: 'AES-GCM',
-                            iv: iv
-                        },
-                        key,
-                        ciphertext
-                    );
-                    const decoder = new TextDecoder();
-                    return decoder.decode(decrypted);
-                } catch (error) {
-                    throw new Error('Dekripsi gagal. Pastikan kunci Anda benar.');
-                }
-            }
-
-            static base64ToArrayBuffer(base64) {
-                const binaryString = atob(base64);
-                const bytes = new Uint8Array(binaryString.length);
-                for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
-                return bytes.buffer;
-            }
-        }
-
-        document.getElementById('decryptBtn').addEventListener('click', async () => {
-            const keyInput = document.getElementById('key');
-            const key = keyInput.value.trim();
-            const messageDiv = document.getElementById('message');
-            const contentDiv = document.getElementById('content');
             
-            if (!key) {
-                messageDiv.textContent = '❌ Masukkan kunci terlebih dahulu!';
-                messageDiv.className = 'message error';
-                messageDiv.style.display = 'block';
-                contentDiv.style.display = 'none';
+            const algorithm = document.querySelector('input[name="algorithm"]:checked').value;
+            let encryptedText;
+            
+            if (algorithm === 'base64') {
+                // Enkripsi Base64 sederhana
+                encryptedText = btoa(unescape(encodeURIComponent(inputText)));
+            } else {
+                // Enkripsi lanjutan dengan kombinasi Base64 dan rotasi karakter
+                const base64Encoded = btoa(unescape(encodeURIComponent(inputText)));
+                encryptedText = base64Encoded.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    return String.fromCharCode(code + 3); // Rotasi karakter sederhana
+                }).join('');
+            }
+            
+            // Format output dengan fungsi dekripsi
+            const output = `<!-- Enkripsi HTML -->
+<script>
+    function decryptCode() {
+        const encryptedText = "${btoa(encryptedText)}";
+        let decodedText = atob(encryptedText);
+        
+        ${algorithm === 'advanced' ? `
+        // Dekripsi advanced
+        decodedText = decodedText.split('').map(char => {
+            const code = char.charCodeAt(0);
+            return String.fromCharCode(code - 3);
+        }).join('');
+        ` : ''}
+        
+        // Decode dari Base64
+        const originalHtml = decodeURIComponent(escape(atob(decodedText)));
+        
+        // Tulis ke dokumen
+        document.write(originalHtml);
+        document.close();
+    }
+    
+    // Jalankan dekripsi
+    decryptCode();
+<\/script>
+<noscript>JavaScript diperlukan untuk mendekripsi konten ini.</noscript>`;
+            
+            document.getElementById('outputText').value = output;
+        }
+        
+        function decryptHTML() {
+            const inputText = document.getElementById('inputText').value;
+            if (!inputText.trim()) {
+                alert('Masukkan kode terenkripsi terlebih dahulu!');
                 return;
             }
             
             try {
-                messageDiv.textContent = '⏳ Sedang mendekripsi...';
-                messageDiv.className = 'message';
-                messageDiv.style.display = 'block';
-                document.getElementById('decryptBtn').disabled = true;
-                document.getElementById('decryptBtn').textContent = '⏳ Sedang Memproses...';
+                // Ekstrak teks terenkripsi dari kode
+                const encryptedTextMatch = inputText.match(/const encryptedText = "([^"]+)"/);
+                if (!encryptedTextMatch) {
+                    throw new Error('Format kode terenkripsi tidak valid');
+                }
                 
-                // Use the encrypted data embedded in this file
-                const encryptedData = '${safeEncryptedData}';
-                const decrypted = await AESDecryptor.decrypt(encryptedData, key);
+                const encryptedText = encryptedTextMatch[1];
+                let decodedText = atob(encryptedText);
                 
-                // Try to render as HTML
-                contentDiv.innerHTML = decrypted;
-                contentDiv.style.display = 'block';
+                // Periksa apakah ini advanced encryption
+                if (inputText.includes('code - 3')) {
+                    decodedText = decodedText.split('').map(char => {
+                        const code = char.charCodeAt(0);
+                        return String.fromCharCode(code - 3);
+                    }).join('');
+                }
                 
-                messageDiv.textContent = '✅ Konten berhasil didekripsi!';
-                messageDiv.className = 'message success';
-                keyInput.value = ''; // Clear the key input for security
-            } catch (e) {
-                messageDiv.textContent = '❌ ' + e.message;
-                messageDiv.className = 'message error';
-            } finally {
-                document.getElementById('decryptBtn').disabled = false;
-                document.getElementById('decryptBtn').textContent = '🔓 Dekripsi & Tampilkan Konten';
+                // Decode dari Base64
+                const originalHtml = decodeURIComponent(escape(atob(decodedText)));
+                document.getElementById('outputText').value = originalHtml;
+            } catch (error) {
+                alert('Error dalam dekripsi: ' + error.message);
             }
-        });
+        }
         
-        // Allow Enter key to trigger decryption
-        document.getElementById('key').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('decryptBtn').click();
-            }
-        });
-    </script>
-</body>
-</html>`;
-            }
-
-            // Encrypt function with runnable HTML output
-            encryptBtn.addEventListener('click', async () => {
-                const text = inputText.value.trim();
-                const key = keyInput.value.trim();
-                
-                if (!text) {
-                    showMessage('Masukkan kode HTML terlebih dahulu!', 'error', messageEl);
-                    return;
-                }
-                
-                if (!key) {
-                    showMessage('Masukkan kunci enkripsi terlebih dahulu!', 'error', messageEl);
-                    return;
-                }
-                
-                if (key.length < 8) {
-                    showMessage('Kunci harus minimal 8 karakter!', 'error', messageEl);
-                    return;
-                }
-                
-                try {
-                    // Tambahkan animasi loading
-                    encryptBtn.innerHTML = '⏳ Sedang Mengenkripsi...';
-                    encryptBtn.disabled = true;
-                    
-                    const encrypted = await AESHTMLCrypt.encrypt(text, key);
-                    const runnableHTML = createRunnableHTML(encrypted);
-                    outputText.value = runnableHTML;
-                    showMessage('Berhasil! Sekarang Anda bisa salin atau download file HTML yang bisa langsung dibuka di browser.', 'success', messageEl);
-                } catch (e) {
-                    showMessage('Gagal mengenkripsi: ' + e.message, 'error', messageEl);
-                } finally {
-                    encryptBtn.innerHTML = '🔐 Enkripsi & Buat File HTML';
-                    encryptBtn.disabled = false;
-                }
-            });
-
-            // Download function
-            downloadBtn.addEventListener('click', () => {
-                if (!outputText.value) {
-                    showMessage('Tidak ada hasil untuk didownload!', 'error', messageEl);
-                    return;
-                }
-                
-                const blob = new Blob([outputText.value], {type: 'text/html;charset=utf-8'});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'konten-terlindungi.html';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showMessage('File berhasil didownload! Buka file tersebut di browser untuk melihat konten (setelah memasukkan kunci).', 'success', messageEl);
-            });
-
-            // Decrypt function
-            decryptBtn.addEventListener('click', async () => {
-                const text = decryptInputText.value.trim();
-                const key = decryptKeyInput.value.trim();
-                
-                if (!text) {
-                    showMessage('Masukkan kode terenkripsi terlebih dahulu!', 'error', decryptMessageEl);
-                    return;
-                }
-                
-                if (!key) {
-                    showMessage('Masukkan kunci dekripsi terlebih dahulu!', 'error', decryptMessageEl);
-                    return;
-                }
-                
-                try {
-                    // Tambahkan animasi loading
-                    decryptBtn.innerHTML = '⏳ Sedang Mendekripsi...';
-                    decryptBtn.disabled = true;
-                    
-                    const decrypted = await AESHTMLCrypt.decrypt(text, key);
-                    decryptOutputText.value = decrypted;
-                    showMessage('Kode HTML berhasil didekripsi!', 'success', decryptMessageEl);
-                } catch (e) {
-                    showMessage('Gagal mendekripsi: Pastikan kunci benar dan format teks valid. ' + e.message, 'error', decryptMessageEl);
-                } finally {
-                    decryptBtn.innerHTML = '🔓 Dekripsi HTML';
-                    decryptBtn.disabled = false;
-                }
-            });
-
-            // Clear functions
-            clearBtn.addEventListener('click', () => {
-                inputText.value = '';
-                keyInput.value = '';
-                outputText.value = '';
-                messageEl.classList.remove('show');
-            });
-
-            decryptClearBtn.addEventListener('click', () => {
-                decryptInputText.value = '';
-                decryptKeyInput.value = '';
-                decryptOutputText.value = '';
-                decryptMessageEl.classList.remove('show');
-            });
-
-            // Copy to clipboard functions
-            copyBtn.addEventListener('click', () => {
-                if (!outputText.value) {
-                    showMessage('Tidak ada hasil untuk disalin!', 'error', messageEl);
-                    return;
-                }
-                navigator.clipboard.writeText(outputText.value).then(() => {
-                    showMessage('Berhasil menyalin ke clipboard!', 'success', messageEl);
-                    copyBtn.innerHTML = '✅ Tersalin!';
-                    setTimeout(() => {
-                        copyBtn.innerHTML = '📋 Salin';
-                    }, 2000);
-                }).catch(() => {
-                    showMessage('Gagal menyalin. Coba lagi.', 'error', messageEl);
-                });
-            });
-
-            decryptCopyBtn.addEventListener('click', () => {
-                if (!decryptOutputText.value) {
-                    showMessage('Tidak ada hasil untuk disalin!', 'error', decryptMessageEl);
-                    return;
-                }
-                navigator.clipboard.writeText(decryptOutputText.value).then(() => {
-                    showMessage('Berhasil menyalin ke clipboard!', 'success', decryptMessageEl);
-                    decryptCopyBtn.innerHTML = '✅ Tersalin!';
-                    setTimeout(() => {
-                        decryptCopyBtn.innerHTML = '📋 Salin';
-                    }, 2000);
-                }).catch(() => {
-                    showMessage('Gagal menyalin. Coba lagi.', 'error', decryptMessageEl);
-                });
-            });
-
-            // Show message helper
-            function showMessage(text, type, element) {
-                element.textContent = text;
-                element.className = `message ${type}`;
-                element.classList.add('show');
-                setTimeout(() => {
-                    element.classList.remove('show');
-                }, 3000);
-            }
-
-            // Sample HTML for demo
-            const sampleHTML = `<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Rahasia</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: white;
-        }
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        .secret-code {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 1.1rem;
-            margin: 20px 0;
-            display: inline-block;
-        }
-        button {
-            background: linear-gradient(135deg, #4338ca, #3730a3);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(67, 56, 202, 0.3);
-        }
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(67, 56, 202, 0.4);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🎯 Konten Rahasia Terungkap!</h1>
-        <p>Anda telah berhasil membuka konten yang dilindungi dengan enkripsi AES-256.</p>
-        <div class="secret-code">KODE: SECRET-2024-AES</div>
-        <p>Gunakan kode ini untuk mengakses fitur premium atau konten eksklusif.</p>
-        <button onclick="alert('Selamat! Anda telah berhasil membuka konten rahasia ini.')">Konfirmasi Akses</button>
-    </div>
-</body>
-</html>`;
-
-            // Add sample button
-            const addSampleBtn = document.createElement('button');
-            addSampleBtn.textContent = 'Tambahkan Contoh HTML';
-            addSampleBtn.className = 'btn';
-            addSampleBtn.style.cssText = 'background: linear-gradient(135deg, #10b981, #059669); color: white; margin-top: 1rem; width: 100%;';
-            addSampleBtn.addEventListener('click', () => {
-                inputText.value = sampleHTML;
-                showMessage('Contoh HTML telah ditambahkan!', 'info', messageEl);
-            });
+        function copyToClipboard() {
+            const outputText = document.getElementById('outputText');
+            outputText.select();
+            document.execCommand('copy');
             
-            // Insert before encrypt button
-            encryptBtn.parentNode.insertBefore(addSampleBtn, encryptBtn);
-        });
+            // Tampilkan notifikasi
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
     </script>
 </body>
 </html>
