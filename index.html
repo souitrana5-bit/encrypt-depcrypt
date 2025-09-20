@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AES HTML Encrypt & Decrypt Tool</title>
+    <title>AES HTML Encrypt & Decrypt Tool - Auto-Runnable</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -508,7 +508,7 @@
     <div class="container">
         <header>
             <h1>🔐 AES HTML Encrypt & Decrypt</h1>
-            <p class="subtitle">Alat profesional untuk mengenkripsi dan mendekripsi kode HTML Anda dengan AES-256 yang aman dan andal.</p>
+            <p class="subtitle">Enkripsi kode HTML Anda menjadi file .html yang bisa langsung dibuka di browser — masukkan kunci untuk melihat konten asli!</p>
         </header>
 
         <main>
@@ -522,6 +522,11 @@
 
             <div class="features">
                 <div class="feature-card">
+                    <div class="feature-icon">🔓</div>
+                    <h3 class="feature-title">Auto-Runnable</h3>
+                    <p class="feature-desc">Hasil enkripsi bisa langsung dibuka di browser</p>
+                </div>
+                <div class="feature-card">
                     <div class="feature-icon">🔒</div>
                     <h3 class="feature-title">AES-256</h3>
                     <p class="feature-desc">Enkripsi tingkat militer untuk keamanan maksimal</p>
@@ -529,12 +534,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">💻</div>
                     <h3 class="feature-title">Client-Side</h3>
-                    <p class="feature-desc">Semua proses terjadi di browser Anda, data tidak dikirim ke server</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3 class="feature-title">Responsive</h3>
-                    <p class="feature-desc">Bekerja sempurna di semua perangkat, desktop maupun mobile</p>
+                    <p class="feature-desc">Semua proses terjadi di browser Anda</p>
                 </div>
             </div>
 
@@ -547,7 +547,7 @@
 
                 <div class="tab-content active" id="encrypt-tab">
                     <div class="message info show">
-                        <strong>💡 Tips:</strong> Enkripsi kode HTML Anda untuk melindungi konten sensitif sebelum menyimpan atau berbagi.
+                        <strong>💡 Fitur Baru:</strong> Hasil enkripsi sekarang bisa disimpan sebagai file .html dan langsung dibuka di browser! Masukkan kunci untuk melihat konten asli.
                     </div>
                     
                     <div class="input-group">
@@ -573,7 +573,7 @@
                     </div>
 
                     <div class="button-group">
-                        <button id="encryptBtn" class="btn primary pulse">🔐 Enkripsi HTML</button>
+                        <button id="encryptBtn" class="btn primary pulse">🔐 Enkripsi & Buat File HTML</button>
                         <button id="clearBtn" class="btn tertiary">🗑️ Bersihkan</button>
                     </div>
 
@@ -586,11 +586,12 @@
                                 <path d="M12 16v4"></path>
                                 <path d="M8 20h8"></path>
                             </svg>
-                            Hasil Enkripsi (Base64)
+                            Hasil Enkripsi (File HTML yang bisa dibuka)
                         </label>
                         <div class="output-wrapper">
                             <textarea id="outputText" readonly placeholder="Hasil enkripsi akan muncul di sini..."></textarea>
                             <button id="copyBtn" class="copy-btn">📋 Salin</button>
+                            <button id="downloadBtn" class="copy-btn" style="left: 12px; right: auto;">💾 Download</button>
                         </div>
                     </div>
                 </div>
@@ -606,7 +607,7 @@
                                 <polyline points="22 18 16 12 22 6"></polyline>
                                 <polyline points="2 6 8 12 2 18"></polyline>
                             </svg>
-                            Kode Terenkripsi (Base64)
+                            Kode Terenkripsi (atau file HTML terenkripsi)
                         </label>
                         <textarea id="decryptInputText" placeholder="Tempel kode terenkripsi Anda di sini..."></textarea>
                     </div>
@@ -647,28 +648,32 @@
 
                 <div class="tab-content" id="info-tab">
                     <div class="message info show">
-                        <h3 style="margin-bottom: 1rem; color: var(--accent);">ℹ️ Tentang AES HTML Encrypt & Decrypt Tool</h3>
-                        <p style="margin-bottom: 1rem;">Alat ini menggunakan enkripsi AES-256-GCM, standar enkripsi tingkat militer yang digunakan secara global untuk melindungi data sensitif.</p>
-                        <p style="margin-bottom: 1rem;"><strong>Keamanan:</strong> Semua proses enkripsi dan dekripsi dilakukan sepenuhnya di browser Anda. Tidak ada data yang dikirim ke server.</p>
-                        <p style="margin-bottom: 1rem;"><strong>Kunci:</strong> Kunci enkripsi Anda tidak disimpan di mana pun. Jika Anda kehilangan kunci, data Anda tidak dapat dipulihkan.</p>
-                        <p><strong>Penggunaan:</strong> Cocok untuk melindungi kode HTML, template email, konten web sensitif, atau data pribadi sebelum menyimpan atau berbagi.</p>
+                        <h3 style="margin-bottom: 1rem; color: var(--accent);">ℹ️ Tentang Fitur Auto-Runnable</h3>
+                        <p style="margin-bottom: 1rem;">Sekarang, ketika Anda mengenkripsi kode HTML, hasilnya adalah file HTML lengkap yang bisa langsung Anda buka di browser.</p>
+                        <p style="margin-bottom: 1rem;">File ini berisi:</p>
+                        <ul style="text-align: left; margin-left: 1.5rem; margin-bottom: 1rem;">
+                            <li>Script dekripsi AES yang aman</li>
+                            <li>Form input untuk memasukkan kunci</li>
+                            <li>Tombol untuk mendekripsi dan menampilkan konten asli</li>
+                        </ul>
+                        <p><strong>Cara Penggunaan:</strong> Simpan hasil enkripsi sebagai file .html, buka di browser, masukkan kunci, lalu tekan tombol untuk melihat konten asli!</p>
                     </div>
                     
                     <div class="features">
                         <div class="feature-card">
                             <div class="feature-icon">✅</div>
-                            <h3 class="feature-title">Keamanan Tinggi</h3>
-                            <p class="feature-desc">Menggunakan AES-256-GCM dengan IV acak untuk setiap enkripsi</p>
+                            <h3 class="feature-title">Langsung Bisa Dibuka</h3>
+                            <p class="feature-desc">Tidak perlu tools tambahan, buka saja di browser</p>
                         </div>
                         <div class="feature-card">
-                            <div class="feature-icon">⚡</div>
-                            <h3 class="feature-title">Cepat & Efisien</h3>
-                            <p class="feature-desc">Dioptimalkan untuk kinerja tinggi bahkan dengan file HTML besar</p>
+                            <div class="feature-icon">🔒</div>
+                            <h3 class="feature-title">Tetap Aman</h3>
+                            <p class="feature-desc">Konten tetap terenkripsi sampai Anda masukkan kunci</p>
                         </div>
                         <div class="feature-card">
-                            <div class="feature-icon">🛡️</div>
-                            <h3 class="feature-title">Tanpa Server</h3>
-                            <p class="feature-desc">100% client-side, privasi Anda terjamin</p>
+                            <div class="feature-icon">📥</div>
+                            <h3 class="feature-title">Download Otomatis</h3>
+                            <p class="feature-desc">Tombol download untuk menyimpan file langsung</p>
                         </div>
                     </div>
                 </div>
@@ -805,6 +810,7 @@
             const encryptBtn = document.getElementById('encryptBtn');
             const clearBtn = document.getElementById('clearBtn');
             const copyBtn = document.getElementById('copyBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
             const messageEl = document.querySelector('#encrypt-tab .message');
 
             // Elements for decrypt tab
@@ -831,7 +837,194 @@
                 localStorage.setItem('theme', theme);
             });
 
-            // Encrypt function
+            // Create runnable HTML template
+            function createRunnableHTML(encryptedData) {
+                return `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konten Terlindungi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: monospace;
+        }
+        button {
+            background: #4338ca;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #3730a3;
+        }
+        #content {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            text-align: left;
+            background: #fafafa;
+            max-height: 500px;
+            overflow: auto;
+        }
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            display: none;
+        }
+        .message.error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+        }
+        .message.success {
+            background: #efe;
+            border: 1px solid #cfc;
+            color: #3c3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Konten Terlindungi</h1>
+        <p>Masukkan kunci untuk melihat konten asli.</p>
+        
+        <div class="input-group">
+            <label for="key">Kunci Dekripsi:</label>
+            <input type="password" id="key" placeholder="Masukkan kunci Anda di sini">
+        </div>
+        
+        <button id="decryptBtn">🔓 Dekripsi & Tampilkan Konten</button>
+        
+        <div id="message" class="message"></div>
+        <div id="content"></div>
+    </div>
+
+    <script>
+        // AES decryption implementation
+        class AESDecryptor {
+            static async generateKey(password) {
+                const encoder = new TextEncoder();
+                const passwordData = encoder.encode(password);
+                const keyMaterial = await crypto.subtle.digest('SHA-256', passwordData);
+                return await crypto.subtle.importKey(
+                    'raw',
+                    keyMaterial,
+                    {name: 'AES-GCM'},
+                    false,
+                    ['decrypt']
+                );
+            }
+
+            static async decrypt(encryptedText, password) {
+                const key = await this.generateKey(password);
+                const encryptedData = this.base64ToArrayBuffer(encryptedText);
+                const iv = encryptedData.slice(0, 12);
+                const ciphertext = encryptedData.slice(12);
+                const decrypted = await crypto.subtle.decrypt(
+                    {
+                        name: 'AES-GCM',
+                        iv: iv
+                    },
+                    key,
+                    ciphertext
+                );
+                const decoder = new TextDecoder();
+                return decoder.decode(decrypted);
+            }
+
+            static base64ToArrayBuffer(base64) {
+                const binaryString = atob(base64);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                return bytes.buffer;
+            }
+        }
+
+        document.getElementById('decryptBtn').addEventListener('click', async () => {
+            const key = document.getElementById('key').value.trim();
+            const messageDiv = document.getElementById('message');
+            const contentDiv = document.getElementById('content');
+            
+            if (!key) {
+                messageDiv.textContent = 'Masukkan kunci terlebih dahulu!';
+                messageDiv.className = 'message error';
+                messageDiv.style.display = 'block';
+                contentDiv.style.display = 'none';
+                return;
+            }
+            
+            try {
+                messageDiv.textContent = 'Sedang mendekripsi...';
+                messageDiv.className = 'message';
+                messageDiv.style.display = 'block';
+                
+                const decrypted = await AESDecryptor.decrypt('${encryptedData}', key);
+                contentDiv.innerHTML = decrypted;
+                contentDiv.style.display = 'block';
+                messageDiv.textContent = 'Konten berhasil didekripsi!';
+                messageDiv.className = 'message success';
+            } catch (e) {
+                messageDiv.textContent = 'Gagal mendekripsi: Periksa kembali kunci Anda.';
+                messageDiv.className = 'message error';
+            }
+        });
+    </script>
+</body>
+</html>`;
+            }
+
+            // Encrypt function with runnable HTML output
             encryptBtn.addEventListener('click', async () => {
                 const text = inputText.value.trim();
                 const key = keyInput.value.trim();
@@ -857,14 +1050,35 @@
                     encryptBtn.disabled = true;
                     
                     const encrypted = await AESHTMLCrypt.encrypt(text, key);
-                    outputText.value = encrypted;
-                    showMessage('Kode HTML berhasil dienkripsi dengan AES-256!', 'success', messageEl);
+                    const runnableHTML = createRunnableHTML(encrypted);
+                    outputText.value = runnableHTML;
+                    showMessage('Berhasil! Sekarang Anda bisa salin atau download file HTML yang bisa langsung dibuka di browser.', 'success', messageEl);
                 } catch (e) {
                     showMessage('Gagal mengenkripsi: ' + e.message, 'error', messageEl);
                 } finally {
-                    encryptBtn.innerHTML = '🔐 Enkripsi HTML';
+                    encryptBtn.innerHTML = '🔐 Enkripsi & Buat File HTML';
                     encryptBtn.disabled = false;
                 }
+            });
+
+            // Download function
+            downloadBtn.addEventListener('click', () => {
+                if (!outputText.value) {
+                    showMessage('Tidak ada hasil untuk didownload!', 'error', messageEl);
+                    return;
+                }
+                
+                const blob = new Blob([outputText.value], {type: 'text/html'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'konten-terlindungi.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showMessage('File berhasil didownload! Buka file tersebut di browser untuk melihat konten (setelah memasukkan kunci).', 'success', messageEl);
             });
 
             // Decrypt function
@@ -890,39 +1104,6 @@
                     const decrypted = await AESHTMLCrypt.decrypt(text, key);
                     decryptOutputText.value = decrypted;
                     showMessage('Kode HTML berhasil didekripsi!', 'success', decryptMessageEl);
-                    
-                    // Coba format HTML jika hasilnya adalah HTML
-                    if (decrypted.trim().startsWith('<') && decrypted.trim().endsWith('>')) {
-                        try {
-                            // Sederhana: tambahkan indentasi dasar
-                            let formatted = decrypted;
-                            if (formatted.includes('<') && formatted.includes('>')) {
-                                let indent = 0;
-                                const lines = formatted.split(/>\s*</);
-                                if (lines.length > 1) {
-                                    formatted = '';
-                                    for (let i = 0; i < lines.length; i++) {
-                                        if (i > 0) {
-                                            // Kurangi indent jika tag penutup
-                                            if (lines[i].startsWith('/')) indent = Math.max(0, indent - 1);
-                                            formatted += '\n' + '  '.repeat(indent);
-                                            formatted += '>';
-                                        }
-                                        if (i < lines.length - 1) {
-                                            formatted += '<' + lines[i];
-                                            // Tambahkan indent jika tag pembuka
-                                            if (!lines[i].startsWith('/') && !lines[i].endsWith('/')) {
-                                                indent++;
-                                            }
-                                        }
-                                    }
-                                    decryptOutputText.value = formatted;
-                                }
-                            }
-                        } catch (e) {
-                            // Jika gagal format, biarkan apa adanya
-                        }
-                    }
                 } catch (e) {
                     showMessage('Gagal mendekripsi: Pastikan kunci benar dan format teks valid.', 'error', decryptMessageEl);
                 } finally {
@@ -989,16 +1170,6 @@
                 }, 3000);
             }
 
-            // Auto-detect encrypted content
-            decryptInputText.addEventListener('input', function() {
-                const value = this.value.trim();
-                if (value && /^[A-Za-z0-9+/=]+$/.test(value) && value.length % 4 === 0) {
-                    if (!decryptKeyInput.value && !decryptMessageEl.classList.contains('show')) {
-                        showMessage('Ini terlihat seperti teks terenkripsi. Masukkan kunci untuk mendekripsi.', 'warning', decryptMessageEl);
-                    }
-                }
-            });
-
             // Sample HTML for demo
             const sampleHTML = `<!DOCTYPE html>
 <html lang="id">
@@ -1006,17 +1177,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contoh HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+        button {
+            background: #4338ca;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #3730a3;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Halo Dunia!</h1>
-        <p>Ini adalah contoh kode HTML yang bisa Anda enkripsi.</p>
-        <button onclick="alert('Halo!')">Klik Saya</button>
+        <h1>🎉 Selamat Datang di Website Saya!</h1>
+        <p>Ini adalah contoh konten HTML yang bisa Anda enkripsi untuk melindungi privasi atau keamanan.</p>
+        <p>Konten ini hanya bisa dilihat oleh orang yang memiliki kunci dekripsi yang benar.</p>
+        <button onclick="alert('Anda berhasil membuka konten ini!')">Klik Saya</button>
     </div>
 </body>
 </html>`;
 
-            // Add sample button (optional)
+            // Add sample button
             const addSampleBtn = document.createElement('button');
             addSampleBtn.textContent = 'Tambahkan Contoh HTML';
             addSampleBtn.className = 'btn';
